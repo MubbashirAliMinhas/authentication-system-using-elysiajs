@@ -1,7 +1,7 @@
 # authentication-code-base-using-elysiajs
 
 This is an authentication system built using elysiajs
-Following deatures are included,
+Following features are included,
 -Permission based roles
 -Verify account and forgot password
 
