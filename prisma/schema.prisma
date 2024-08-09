@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum UserType {
+  USER
+  ADMIN
+}
+
+model Role {
+  id                String             @id @default(auto()) @map("_id") @db.ObjectId
+  user              User[]
+  userType          UserType           @unique
+  permissions       String[]
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+}
+
+model User {
+  id                String             @id @default(auto()) @map("_id") @db.ObjectId
+  email             String             
+  password          String?
+  name              String
+  verified          Boolean
+  role              Role               @relation(fields: [roleId], references: [id])
+  roleId            String             @db.ObjectId
+  oTPHandler        OTPHandler[]
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  @@unique([email, roleId], name: "email_roleId")
+}
+
+enum OTPPurpose {
+  FORGOT_PASSWORD
+  VERIFICATION
+}
+
+model OTPHandler {
+  id                String             @id @default(auto()) @map("_id") @db.ObjectId
+  user              User               @relation(fields: [userId], references: [id])
+  userId            String             @db.ObjectId
+  oTPPurpose        OTPPurpose
+  resetId           String?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  @@unique([userId, oTPPurpose], name: "userId_oTPPurpose")
+}

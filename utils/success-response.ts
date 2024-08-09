@@ -1,0 +1,1 @@
+export const successResponse = { message: 'Success' }
