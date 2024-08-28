@@ -2,8 +2,8 @@
 
 This is an authentication system built using elysiajs
 Following features are included,
--Permission based roles
--Verify account and forgot password
+- Permission based roles
+- Verify account and forgot password
 
 To install dependencies:
 
